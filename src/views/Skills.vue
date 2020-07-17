@@ -1,9 +1,9 @@
 <template lang="pug">
   #resume
-    h2.mb-3 {{ skillsHeading }}
-    p.mb-5 {{ skillsDesc }}
+    h2.mb-3 {{ me.skillsHeading }}
+    p.mb-5 {{ me.skillsDesc }}
     .mb-n5
-      .mb-5(v-for="skill in skills" :key="skill.key")
+      .mb-5(v-for="skill in me.skills" :key="skill.key")
         h3.mb-4 {{ skill.label }}
         b-row.mb-3(v-for="item in skill.value" :key="item.key")
           b-col(sm="3")
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { skillsHeading, skillsDesc, skills } from '@/assets/me.json'
+import { mapState } from 'vuex'
 
 const EXP_TO_VAL = {
   NOVICE: 25,
@@ -32,11 +32,9 @@ const EXP_TO_THEME = {
 
 export default {
   name: "Skills",
-  data: () => ({
-    skillsHeading,
-    skillsDesc,
-    skills
-  }),
+  computed: {
+    ...mapState(['me'])
+  },
   methods: {
     expToVal(exp) {
       return EXP_TO_VAL[exp];

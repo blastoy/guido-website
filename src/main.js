@@ -11,6 +11,7 @@ import 'vue-awesome/icons/phone'
 import './assets/styles.scss'
 
 import router from './router'
+import store from './store'
 
 Vue.component('v-icon', Icon)
 
@@ -18,7 +19,11 @@ Vue.use(BootstrapVue)
 
 Vue.config.productionTip = false
 
-new Vue({
-  router,
-  render: h => h(App)
-}).$mount('#app')
+store.dispatch('FetchMe')
+  .then(() => {
+    new Vue({
+      router,
+      store,
+      render: h => h(App)
+    }).$mount('#app')
+  })

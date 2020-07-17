@@ -1,12 +1,13 @@
-require('dotenv').config()
+require("dotenv").config();
 
+const path = require("path");
 const express = require("express");
 const history = require("connect-history-api-fallback");
-const MongoClient = require("mongodb").MongoClient;
+const { MongoClient } = require("mongodb");
 
 const app = express();
 
-const staticFileMiddleware = express.static("dist");
+const staticFileMiddleware = express.static(path.join(__dirname, "dist"));
 const historyMiddleware = history();
 
 app.use(staticFileMiddleware);
@@ -18,13 +19,13 @@ app.use((req, res, next) => {
 
 app.use(staticFileMiddleware); // double is intentional
 
-app.get("/api/me", (res) => {
-  MongoClient(process.env.DB_CONN, (err, client) => {
+app.get("/api/me", (_, res) => {
+  MongoClient.connect(process.env.DB_CONN, (err, db) => {
     if (err) throw err;
-    const db = client.db("personal");
-    db.collection("users").find({ key: "guidoruiz" }, (err, me) => {
+    var dbo = db.db("personal");
+    dbo.collection("users").findOne({ key: "guidoruiz" }, (err, result) => {
       if (err) throw err;
-      res.json(me);
+      res.json(result);
     });
   });
 });

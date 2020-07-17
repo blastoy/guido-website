@@ -18,20 +18,19 @@ import MediaRecorder, {
 import AudioDownsampler from "./utils/AudioDownsampler.class";
 
 const useSpeech = Object.freeze(false);
-import { email, phone, github, linkedin } from '@/assets/me.json'
+import { mapState } from 'vuex'
 
 export default {
   name: "app",
   data: () => ({
     socket: null,
-    email,
-    phone,
-    github,
-    linkedin,
     availableSpeechIntents: [],
     currentTranscript: null,
     currentIntentName: null,
   }),
+  computed: {
+    ...mapState(['me'])
+  },
   components: {
     Navigation,
   },
@@ -51,16 +50,16 @@ export default {
           window.open('/guido-ruiz-resume.pdf', '_blank');
           break;
         case "email":
-          window.open(`mailto:${this.email}`, '_blank')
+          window.open(`mailto:${this.me.email}`, '_blank')
           break;
         case "phone-number":
-          window.open(`tel:${this.phone}`, '_blank')
+          window.open(`tel:${this.me.phone}`, '_blank')
           break;
         case "github":
-          window.open(this.github, '_blank')
+          window.open(this.me.github, '_blank')
           break;
         case "linkedin":
-          window.open(this.linkedin, '_blank')
+          window.open(this.me.linkedin, '_blank')
           break;
       }
     },
